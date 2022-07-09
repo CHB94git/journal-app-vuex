@@ -1,12 +1,7 @@
 <template>
-  <div class="home">
+  <div class="home justify-content-center">
     <img alt="Vue logo" src="../assets/logo.png">
-
-    <h1>Hola sekai</h1>
-
-    <button @click="goToDayBook" class="btn btn-primary">primary</button>
-    <button @click="goToDayBook" class="btn btn-secondary">secondary</button>
-    <button @click="goToDayBook" class="btn btn-success">success</button>
+    <button @click="goToDayBook" class="btn btn-primary">Ir a Journal</button>
   </div>
 </template>
 

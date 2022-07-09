@@ -1,8 +1,9 @@
 <template>
-    <button class="btn btn-primary">
+    <button @click="btnSave" class="btn btn-primary">
         <i class="fa fa-2x" :class="icon"></i>
     </button>
 </template>
+
 
 <script>
 export default {
@@ -12,8 +13,14 @@ export default {
             default: 'fa-plus'
         },
     },
+    methods: {
+        btnSave () {
+            this.$emit('on:click')
+        }
+    },
 }
 </script>
+
 
 <style lang="scss" scoped>
 button {

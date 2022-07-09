@@ -6,7 +6,7 @@
         </a>
 
         <div class="d-flex">
-            <button class="btn btn-outline-info">
+            <button class="btn btn-outline-info mx-3">
                 <i class="fa fa-sign-out-alt"></i>
             </button>
         </div>
