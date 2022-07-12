@@ -48,15 +48,16 @@ import getDayMonthYear from '../helpers/getDayMonthYear'
 import uploadImage from '../helpers/uploadImage'
 
 export default {
-    components: {
-        Fab: defineAsyncComponent(() => import('../components/Fab.vue')),
-    },
-
+    name: 'EntryView',
     props: {
         id: {
             type: String,
             Required: true
         },
+    },
+
+    components: {
+        Fab: defineAsyncComponent(() => import('../components/Fab.vue')),
     },
 
     data () {
@@ -67,13 +68,27 @@ export default {
         }
     },
 
+    computed: {
+        ...mapGetters('journal', ['getEntryById']),
+
+        day () {
+            const { day } = getDayMonthYear(this.entry.date)
+            return day
+        },
+        month () {
+            const { month } = getDayMonthYear(this.entry.date)
+            return month
+        },
+        yearDay () {
+            const { yearDay } = getDayMonthYear(this.entry.date)
+            return yearDay
+        }
+    },
+
     methods: {
         ...mapActions('journal', ['updateEntry', 'createEntry', 'deleteEntry']),
 
         loadEntry () {
-            this.localImage = null
-            this.fileUpload = null
-
             let entry
 
             if (this.id === 'new') {
@@ -89,13 +104,16 @@ export default {
         },
 
         async saveEntry () {
-            new Swal({
+
+            Swal.fire({
                 title: 'Espere por favor',
                 allowOutsideClick: false
             })
+
             Swal.showLoading()
 
             const picture = await uploadImage(this.fileUpload)
+
             this.entry.picture = picture
 
             if (this.entry.id) {
@@ -109,21 +127,26 @@ export default {
         },
 
         async onDeleteEntry () {
+
             const { isConfirmed } = await Swal.fire({
                 title: '¿Estás seguro/a de eliminar?',
                 text: 'Una vez se borre el elemento no se puede deshacer la acción',
                 showDenyButton: true,
+                denyButtonText: 'No, aún no',
+                icon: 'question',
                 confirmButtonText: 'Sí, eliminar'
             })
 
             if (isConfirmed) {
-                new Swal({
+                Swal.fire({
                     title: 'Espere por favor',
                     allowOutsideClick: false
                 })
                 Swal.showLoading()
+
                 await this.deleteEntry(this.entry.id)
                 this.$router.push({ name: 'no-entry' })
+
                 Swal.fire('Eliminado correctamente', '', 'success')
             }
         },
@@ -146,23 +169,6 @@ export default {
 
         onSelectImage () {
             this.$refs.imageSelector.click()
-        }
-    },
-
-    computed: {
-        ...mapGetters('journal', ['getEntryById']),
-
-        day () {
-            const { day } = getDayMonthYear(this.entry.date)
-            return day
-        },
-        month () {
-            const { month } = getDayMonthYear(this.entry.date)
-            return month
-        },
-        yearDay () {
-            const { yearDay } = getDayMonthYear(this.entry.date)
-            return yearDay
         }
     },
 

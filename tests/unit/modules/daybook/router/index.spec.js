@@ -2,7 +2,7 @@ import daybookRouter from '@/modules/daybook/router';
 
 
 describe('Pruebas en el router module del daybook', () => {
-    it('el router debe de tener esta configuración', () => {
+    it('el router debe de tener esta configuración', async () => {
         expect(daybookRouter).toMatchObject({
             name: 'daybook',
             component: expect.any(Function),
@@ -20,5 +20,26 @@ describe('Pruebas en el router module del daybook', () => {
                 }
             ]
         })
+
+        /* expect((await daybookRouter.children[0].component()).default.name).toBe('NoEntrySelected')
+        expect((await daybookRouter.children[1].component()).default.name).toBe('EntryView') */
+
+        const promiseRoutes = []
+        daybookRouter.children.forEach(child => promiseRoutes.push(child.component()))
+
+        const routes = (await Promise.all(promiseRoutes)).map(route => route.default.name)
+
+        expect(routes).toContain('EntryView')
+        expect(routes).toContain('NoEntrySelected')
+    });
+
+    it('debe de retornar el id de la ruta', () => {
+        const route = {
+            params: { id: 'ABC-123' }
+        }
+
+        // expect(daybookRouter.children[1].props(route)).toEqual({ id: 'ABC-123' })
+        const entryRoute = daybookRouter.children.find(route => route.name === 'entry')
+        expect(entryRoute.props(route)).toEqual({ id: 'ABC-123' })
     });
 });
