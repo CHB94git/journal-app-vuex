@@ -12,13 +12,6 @@ cloudinary.config({
     api_secret: process.env.api_secret
 })
 
-/* cloudinary.config({
-    cloud_name: 'chbx8xpui',
-    api_key: '271664382861435',
-    api_secret: 'DQeNr1kuzNxkouO_iC7Tg6C4HqM'
-}) */
-
-
 describe('Pruebas en el uploadImage', () => {
 
     it('debe de cargar un archivo y retornar el url', async (done) => {
